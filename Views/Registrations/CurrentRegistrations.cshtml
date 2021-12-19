@@ -1,0 +1,72 @@
+﻿@model Final.Models.DataAccess.Student
+@{
+    ViewData["Title"] = "Current Registrations";
+}
+<h1>Current Registrations</h1>
+<br />
+<p>
+    <span>Student <span style="font-weight:bold">@Model.StudentNum -  @Model.Name</span> has registered the following courses:</span>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <label asp-for="@Model.Courses[0].CourseId"></label>
+            </th>
+            <th>
+                <label asp-for="@Model.Courses[0].CourseTitle"></label>
+            </th>
+            <th>
+                <label asp-for="@Model.Courses[0].HoursPerWeek"></label>
+            </th>
+            <th>
+                <label asp-for="@Model.Courses[0].FeeBase"></label>
+            </th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Courses.Count > 0)
+        {
+            foreach (var item in Model.Courses)
+            {
+                <tr>
+                    <td>
+                        @item.CourseId
+                    </td>
+                    <td>
+                        @item.CourseTitle
+                    </td>
+                    <td>
+                        @item.HoursPerWeek
+                    </td>
+                    <td>
+                        $@item.FeeBase
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-courseId="@item.CourseId"
+                           asp-route-studentNum="@Model.StudentNum"
+                           title="click to remove this course from the student's registrations"
+                           onclick="return confirm('Course <<@item.CourseId - @item.CourseTitle>> will be removed from the student\'s registrations!');">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="5" style="text-align:center"><span style="color:red">Currently no registrations</span></td></tr>
+        }
+        <tr>
+            <td colspan="4">&nbsp;</td>
+            <td>
+                <a asp-action="AddRegistrations" asp-route-id="@Model.StudentNum"
+                   title="click to add course(s) to this student's registrations">
+                    Add Registrations
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
